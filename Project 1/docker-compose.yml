@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+  app:
+    image: whykciu/ubuntu-gradle:latest
+    ports:
+      - "8110:8110"
