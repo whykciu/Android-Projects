@@ -12,5 +12,5 @@ services:
     links:
       - ktor-app
     environment:
-      - DOMAIN=kto-app
+      - DOMAIN=ktor-app
       - PORT=80
