@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.google.android.material.snackbar.Snackbar
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,20 +34,20 @@ class MainActivity : AppCompatActivity() {
 
         return mutableListOf(
 
-            Item("pierwsze zadanie"),
-            Item("drugie zadanie"),
-            Item("trzecie zadanie"),
-            Item("czwarte zadanie"),
-            Item("piate zadanie"),
-            Item("szoste zadanie"),
-            Item("siodme zadanie"),
-            Item("osme zadanie"),
-            Item("dziewiate zadanie"),
-            Item("trudne zadanie"),
-            Item("latwe zadanie"),
-            Item("umiarkowane zadanie"),
-            Item("dobre zadanie"),
-            Item("ostatnie zadanie")
+            Item("pierwsze zadanie", "opis1", Date(), false),
+            Item("drugie zadanie", "opis2", Date(), false),
+            Item("trzecie zadanie", "opis3", Date(), false),
+            Item("czwarte zadanie", "opis4", Date(), false),
+            Item("piate zadanie", "opis5", Date(), true),
+            Item("szoste zadanie", "opis6", Date(), false),
+            Item("siodme zadanie", "opis7", Date(), false),
+            Item("osme zadanie", "opis8", Date(), false),
+            Item("dziewiate zadanie", "opis9", Date(), false),
+            Item("trudne zadanie", "opis10", Date(), true),
+            Item("latwe zadanie", "opis11", Date(), false),
+            Item("umiarkowane zadanie", "opis12", Date(), false),
+            Item("dobre zadanie", "opis13", Date(), false),
+            Item("ostatnie zadanie", "opis14", Date(), false)
 
         )
 
