@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 
-class ShopListAdapter(private val productList: List<Product>, private val context: Context?) : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>() {
+class ShopListAdapter(private val sharedViewModel: SharedViewModel, private val context: Context?, private val fragment: Fragment) : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>() {
 
     class ShopListViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
@@ -20,27 +22,8 @@ class ShopListAdapter(private val productList: List<Product>, private val contex
         val productIv: ImageView = view.findViewById(R.id.ivProductShop)
         val plusButton: Button = view.findViewById(R.id.btnPlus)
         val minusButton: Button = view.findViewById(R.id.btnMinus)
-
-        fun bind(product: Product){
-
-            nameTv.text = product.name
-            productIv.setImageResource(R.drawable.burger)
-
-            plusButton.setOnClickListener{
-                val quantity: Int = quantityTv.text.toString().toInt() + 1
-                if(quantity <= product.stockLevel){
-                    quantityTv.text = quantity.toString()
-                }
-            }
-
-            minusButton.setOnClickListener{
-                val quantity: Int = quantityTv.text.toString().toInt() - 1
-                if(quantity >= 0){
-                    quantityTv.text = quantity.toString()
-                }
-            }
-
-        }
+        val addButton: ImageButton = view.findViewById(R.id.iBtnAdd)
+        val cardView: CardView = view.findViewById(R.id.cvShopItem)
 
     }
 
@@ -50,23 +33,40 @@ class ShopListAdapter(private val productList: List<Product>, private val contex
     }
 
     override fun getItemCount(): Int {
-        return productList.size
+        return sharedViewModel.getAllProducts().value!!.size
     }
 
     override fun onBindViewHolder(holder: ShopListViewHolder, position: Int) {
 
-        val view: View = holder.itemView
-        val cardView: CardView = view.findViewById(R.id.cvShopItem)
-        val product: Product = productList[position]
+        val product: Product = sharedViewModel.getAllProducts().value!![position]
 
-        cardView.setOnClickListener{
+        holder.cardView.setOnClickListener{
             val intent: Intent = Intent(context, ProductDescriptionActivity::class.java)
             intent.putExtra("NAME", product.name)
             intent.putExtra("DESCRIPTION", product.description)
             context?.startActivity(intent)
         }
 
-        holder.bind(product)
+        holder.nameTv.text = product.name
+        holder.productIv.setImageResource(R.drawable.burger)
+
+        sharedViewModel.getAllProducts().observe(fragment.viewLifecycleOwner) { list ->
+            holder.quantityTv.text = list[position].quantity.toString()
+        }
+
+        holder.quantityTv.text = product.quantity.toString()
+
+        holder.plusButton.setOnClickListener{
+            sharedViewModel.increaseQuantity(position)
+        }
+
+        holder.minusButton.setOnClickListener{
+            sharedViewModel.decreaseQuantity(position)
+        }
+
+        holder.addButton.setOnClickListener{
+            sharedViewModel.addToBag(position)
+        }
 
     }
 

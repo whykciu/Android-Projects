@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".BagFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBagList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Shopping bag fragment"
-        android:textSize="50sp"
-        android:gravity="center"/>
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

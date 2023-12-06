@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/shop"
         android:title="Shop"
-        android:icon="@drawable/baseline_shop_24"/>
+        android:icon="@drawable/baseline_food_bank_24"/>
     <item android:id="@+id/bag"
         android:title="Shopping bag"
-        android:icon="@drawable/baseline_shopping_bag_24"/>
+        android:icon="@drawable/baseline_shopping_basket_24"/>
 </menu>
