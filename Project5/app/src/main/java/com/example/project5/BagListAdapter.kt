@@ -37,22 +37,30 @@ class BagListAdapter(private val sharedViewModel: SharedViewModel, private val f
         val entry = sharedViewModel.getBagProducts().value!![position]
 
         holder.nameTv.text = entry.key.name
-        holder.productIv.setImageResource(R.drawable.burger)
+        holder.productIv.setImageResource(entry.key.img)
 
         sharedViewModel.getBagProducts().observe(fragment.viewLifecycleOwner) { bagList ->
             holder.quantityTv.text = bagList[position].value.toString()
         }
 
         holder.plusButton.setOnClickListener{
-
+            sharedViewModel.increaseQuantityInBag(holder.adapterPosition)
         }
 
         holder.minusButton.setOnClickListener{
 
+            if(entry.value <= 1){
+                sharedViewModel.deleteFromBag(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+            } else {
+                sharedViewModel.decreaseQuantityInBag(holder.adapterPosition)
+            }
+
         }
 
         holder.deleteButton.setOnClickListener {
-
+            sharedViewModel.deleteFromBag(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
         }
 
 

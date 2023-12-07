@@ -12,13 +12,16 @@ class ProductDescriptionActivity : AppCompatActivity() {
 
         val tvName: TextView = findViewById(R.id.tvName)
         val tvDesc: TextView = findViewById(R.id.tvDescription)
+        val ivDesc: ImageView = findViewById(R.id.ivDescImage)
         val backBtn: ImageView = findViewById(R.id.iBtnBack)
 
         val name = intent.getStringExtra("NAME")
         val description = intent.getStringExtra("DESCRIPTION")
+        val image = intent.getStringExtra("IMAGE_ID")
 
         tvName.text = name
         tvDesc.text = description
+        ivDesc.setImageResource(image!!.toInt())
 
         backBtn.setOnClickListener{
             finish()

@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 
@@ -24,6 +25,7 @@ class ShopListAdapter(private val sharedViewModel: SharedViewModel, private val 
         val minusButton: Button = view.findViewById(R.id.btnMinus)
         val addButton: ImageButton = view.findViewById(R.id.iBtnAdd)
         val cardView: CardView = view.findViewById(R.id.cvShopItem)
+        val overlay: TextView = view.findViewById(R.id.tvOverlayOutOfStock)
 
     }
 
@@ -41,31 +43,46 @@ class ShopListAdapter(private val sharedViewModel: SharedViewModel, private val 
         val product: Product = sharedViewModel.getAllProducts().value!![position]
 
         holder.cardView.setOnClickListener{
-            val intent: Intent = Intent(context, ProductDescriptionActivity::class.java)
+            val intent = Intent(context, ProductDescriptionActivity::class.java)
             intent.putExtra("NAME", product.name)
             intent.putExtra("DESCRIPTION", product.description)
+            intent.putExtra("IMAGE_ID", product.img.toString())
             context?.startActivity(intent)
         }
 
         holder.nameTv.text = product.name
-        holder.productIv.setImageResource(R.drawable.burger)
+        holder.productIv.setImageResource(product.img)
+
 
         sharedViewModel.getAllProducts().observe(fragment.viewLifecycleOwner) { list ->
+
+            if(list[position].quantity > list[position].stockLevel){
+                list[position].quantity = 0
+            }
+
+            if(list[position].stockLevel <= 0){
+                holder.overlay.visibility = View.VISIBLE
+                holder.addButton.setBackgroundResource(R.drawable.button_out_of_stock)
+            } else {
+                holder.overlay.visibility = View.GONE
+                holder.addButton.setBackgroundResource(R.drawable.button)
+            }
+
             holder.quantityTv.text = list[position].quantity.toString()
         }
 
-        holder.quantityTv.text = product.quantity.toString()
-
         holder.plusButton.setOnClickListener{
-            sharedViewModel.increaseQuantity(position)
+            sharedViewModel.increaseQuantity(holder.adapterPosition)
         }
 
         holder.minusButton.setOnClickListener{
-            sharedViewModel.decreaseQuantity(position)
+            sharedViewModel.decreaseQuantity(holder.adapterPosition)
         }
 
         holder.addButton.setOnClickListener{
-            sharedViewModel.addToBag(position)
+            if(holder.quantityTv.text.toString().toInt() > 0){
+                sharedViewModel.addToBag(holder.adapterPosition)
+            }
         }
 
     }
