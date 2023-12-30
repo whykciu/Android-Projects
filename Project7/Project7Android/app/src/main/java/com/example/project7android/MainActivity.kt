@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.types.RealmObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +22,12 @@ class MainActivity : AppCompatActivity() {
         .baseUrl(baseUrl)
         .build()
         .create(ApiInterface::class.java)
+
+    private val config = RealmConfiguration.Builder(
+        schema = setOf(ProductItem::class, CategoryItem::class)
+    ).name("ProductsDB.realm").build()
+
+    private val realm = Realm.open(config)
 
     private lateinit var productRV: RecyclerView
     private lateinit var categoryRV: RecyclerView
@@ -43,6 +52,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun <T> writeToRealm(list: List<T>) where T : RealmObject {
+        realm.writeBlocking {
+            for(l in list){
+                copyToRealm(l)
+            }
+        }
+    }
+
     private fun getAllProducts(){
 
         val retrofitData = retrofitBuilder.getProducts()
@@ -52,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                 val products = response.body()!!
                 productAdapter = ProductAdapter(products)
                 productRV.adapter = productAdapter
+                writeToRealm(products)
             }
 
             override fun onFailure(call: Call<List<ProductItem>?>, t: Throwable) {
@@ -70,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                 val categories = response.body()!!
                 categoryAdapter = CategoryAdapter(categories)
                 categoryRV.adapter = categoryAdapter
+                writeToRealm(categories)
             }
 
             override fun onFailure(call: Call<List<CategoryItem>?>, t: Throwable) {
