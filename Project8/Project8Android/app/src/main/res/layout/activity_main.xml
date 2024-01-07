@@ -42,6 +42,18 @@
         android:padding="10dp" />
 
     <Button
+        android:id="@+id/btnGoogle"
+        android:backgroundTint="#179C00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="10dp"
+        android:text="Sign in with Google"
+        android:padding="10dp" />
+
+    <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
